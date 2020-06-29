@@ -1,23 +1,22 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { env } from "./config"
-import {
-    getAPI,
-    postAPI
-} from "./auth-utils";
-import withAuth, { Json } from "./withAuth";
+import withAPI, { Json } from "./withAPI";
+import withAuth from "./withAuth";
 
 class GraphAPI extends Component {
     static propTypes = {
-        account: PropTypes.object,
-        acquireToken: PropTypes.func.isRequired,
+        isAuthenticated: PropTypes.bool,
+        isB2B: PropTypes.bool,
+        apiResult: PropTypes.object,
+        apiError: PropTypes.object,
+        onGetAPI: PropTypes.func.isRequired,
+        onPostAPI: PropTypes.func.isRequired,
     };
 
     constructor(props) {
         super(props);
         this.state = {
-            result: null,
-            error: null,
             targetEmail: ""
         }
     }
@@ -29,74 +28,27 @@ class GraphAPI extends Component {
     }
 
     async onInviteB2BUser() {
-        const tokenResponse = await this.props.acquireToken(
-            {"scopes": env.auth.apiScopes}
-        ).catch(e => {
-            this.setState({
-                error: "Unable to acquire access token."
-            });
-        });
-
-        if (tokenResponse) {
-            const data = {"Email": this.state.targetEmail};
-            const invitations = await postAPI(
-                env.apiURL + "/user", 
-                tokenResponse.accessToken,
-                data
-            ).catch(e => {
-                this.setState({
-                    error: "Unable to invite user."
-                });
-            });
-
-            if (invitations) {
-                this.setState({
-                    result: invitations,
-                    error: null
-                });
-            }
-        }
+        const scopes = env.auth.apiScopes;
+        const endpoint = env.apiURL + "/user";
+        const data = {"Email": this.state.targetEmail};
+        this.props.onPostAPI(scopes, endpoint, data);
     }
 
     async onCheckInvitationStatus() {
-        const tokenResponse = await this.props.acquireToken(
-            {"scopes": env.auth.apiScopes}
-        ).catch(e => {
-            this.setState({
-                error: "Unable to acquire access token."
-            });
-        });
-
+        const scopes = env.auth.apiScopes;
         const emailToCheck = this.state.targetEmail.endsWith("@" + env.auth.domain) ?
             this.state.targetEmail :
             // convert alias@company.com to alias_company.com#EXT#@domain 
             this.state.targetEmail.replace("@", "_")
                     + "#EXT#@" + env.auth.domain
-
-        if (tokenResponse) {
-            const invitationStatus = await getAPI(
-                env.apiURL + "/user/" +
-                    encodeURIComponent(emailToCheck),
-                tokenResponse.accessToken
-            ).catch(() => {
-                this.setState({
-                    error: "Unable to fetch Graph profile."
-                });
-            });
-
-            if (invitationStatus) {
-                this.setState({
-                    result: invitationStatus,
-                    error: null
-                });
-            }
-        }
+        const endpoint = env.apiURL + "/user/" + encodeURIComponent(emailToCheck);
+        this.props.onGetAPI(scopes, endpoint);
     }
 
     render() {
         return (
             <section>
-                {this.props.account && this.props.is_b2b && (
+                {this.props.isAuthenticated && this.props.isB2B && (
                     <>
                         <input type="text" value={ this.state.targetEmail } onChange={(evt) => this.onInputChange(evt)} />
                         <input
@@ -110,8 +62,8 @@ class GraphAPI extends Component {
                             onClick={() => this.onCheckInvitationStatus()}
                         />
                         <div className="data-graph">
-                            {this.state.result && (<Json data={this.state.result} />)}
-                            {this.state.error && (<p className="error">Error: {this.state.error}</p>)}
+                            {this.props.apiResult && (<Json data={this.props.apiResult} />)}
+                            {this.props.apiError && (<p className="error">Error: {this.props.apiError}</p>)}
                         </div>
                     </>
                 )}
@@ -120,4 +72,4 @@ class GraphAPI extends Component {
     }
 }
 
-export default withAuth(GraphAPI);
+export default withAuth(withAPI(GraphAPI));
