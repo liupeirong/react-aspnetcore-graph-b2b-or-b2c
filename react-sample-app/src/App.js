@@ -1,12 +1,13 @@
-import React from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import withAuth, { Json } from "./withAuth";
+import withAuth from "./withAuth";
+import { Json } from "./withAPI";
 import WeatherAPI from "./weatherAPI";
 import GraphAPI from "./graphAPI";
 
 import "./App.css";
 
-class App extends React.Component {
+class App extends Component {
     static propTypes = {
         is_b2b: PropTypes.bool,
         account: PropTypes.object,

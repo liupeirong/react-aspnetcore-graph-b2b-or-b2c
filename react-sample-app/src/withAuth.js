@@ -78,5 +78,3 @@ export default C =>
             );
         }
     };
-
-export const Json = ({ data }) => <pre>{JSON.stringify(data, null, 4)}</pre>;
