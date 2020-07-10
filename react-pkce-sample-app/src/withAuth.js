@@ -18,13 +18,15 @@ export default C =>
         }
 
         async acquireToken(request) {
-            return msalApp.acquireTokenSilent(request).catch((error) => {
-                // Call acquireTokenPopup (popup window) in case of acquireTokenSilent failure
-                // due to consent or interaction required ONLY
+            return await msalApp.acquireTokenSilent(request).catch((error) => {
                 if (requiresInteraction(error.errorCode)) {
-                    return msalApp.acquireTokenRedirect(request);
+                    // acquireTokenPopup is a promise that returns AuthenticationResult;
+                    // acquireTokenRedirect is a pomise that returns void, so you can't get accessToken
+                    // from the resolved promise value. Instead, you'll need to call acquireTokenSilent again 
+                    // to get the accessToken to call an API.
+                    return msalApp.acquireTokenPopup(request);
                 } else {
-                    console.error('Non-interactive error:', error.errorCode)
+                    console.error('Non-interactive error:', error.errorCode);
                 }
             });
         }

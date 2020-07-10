@@ -15,15 +15,10 @@ class WeatherAPI extends Component {
     async onCallWeatherAPI() {
         const scopes = env.auth.apiScopes;
         const endpoint = env.apiURL + "/weatherforecast";
-        this.props.onGetAPI(scopes, endpoint)
+        this.props.onGetAPI(scopes, endpoint);
     }
 
     render() {
-        // AcquireTokenRedirect on msal-browser returns null immediately, and then asynchronously post a token request.
-        // seems to be a bug. For now calling this API twice to work around. 
-        if (this.props.isAuthenticated && this.props.apiResult === null) {
-            this.onCallWeatherAPI();
-        }
         return (
             <section>
                 {this.props.isAuthenticated && (
