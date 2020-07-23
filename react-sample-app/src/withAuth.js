@@ -22,8 +22,10 @@ export default C =>
                 // Call acquireTokenPopup (popup window) in case of acquireTokenSilent failure
                 // due to consent or interaction required ONLY
                 if (requiresInteraction(error.errorCode)) {
+                    const claims = this.state.account.idTokenClaims;
                     return msalApp.acquireTokenRedirect({
                             ...request,
+                            loginHint: claims.email != null ? claims.email : claims.upn,
                             redirectUri: env.auth.redirectURL
                         });
                 } else {
