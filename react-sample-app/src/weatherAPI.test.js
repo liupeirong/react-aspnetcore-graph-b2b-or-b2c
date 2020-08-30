@@ -40,7 +40,7 @@ describe("when authenticated", () => {
   });
 
   it("renders result when weather api returned 200", async () => {
-    const WeatherAPIModuleHasAccount = require("./WeatherAPI");
+    const WeatherAPIModuleHasAccount = require("./weatherAPI");
     const WeatherAPIHasAccount = WeatherAPIModuleHasAccount.default;
 
     const apiResult = { temp: 10 };
@@ -68,7 +68,7 @@ describe("when authenticated", () => {
   });
 
   it("renders error when fetch failed", async () => {
-    const WeatherAPIModuleHasAccount = require("./WeatherAPI");
+    const WeatherAPIModuleHasAccount = require("./weatherAPI");
     const WeatherAPIHasAccount = WeatherAPIModuleHasAccount.default;
 
     jest.spyOn(global, "fetch").mockImplementation(() =>
@@ -94,7 +94,7 @@ describe("when authenticated", () => {
   });
 
   it("renders error when weather API did not return 200", async () => {
-    const WeatherAPIModuleHasAccount = require("./WeatherAPI");
+    const WeatherAPIModuleHasAccount = require("./weatherAPI");
     const WeatherAPIHasAccount = WeatherAPIModuleHasAccount.default;
 
     jest.spyOn(global, "fetch").mockImplementation(() =>
@@ -144,7 +144,7 @@ describe("when not authenticated", () => {
     // and if the module doesn't just export a function,
     // you need to require the module after the mock. See:
     // https://github.com/facebook/jest/issues/2582
-    const WeatherAPIModuleNoAccount = require("./WeatherAPI");
+    const WeatherAPIModuleNoAccount = require("./weatherAPI");
     const WeatherAPINoAccount = WeatherAPIModuleNoAccount.default;
 
     await act(async () => {

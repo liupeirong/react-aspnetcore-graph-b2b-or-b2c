@@ -36,7 +36,7 @@ describe("when authenticated", () => {
   });
 
   it("does not render when not B2B", async () => {
-    const GraphAPIModuleHasAccount = require("./GraphAPI");
+    const GraphAPIModuleHasAccount = require("./graphAPI");
     const GraphAPIHasAccount = GraphAPIModuleHasAccount.default;
 
     await act(async () => {
@@ -48,7 +48,7 @@ describe("when authenticated", () => {
   });
 
   it.skip("renders result when weather api returned 200", async () => {
-    const GraphAPIModuleHasAccount = require("./GraphAPI");
+    const GraphAPIModuleHasAccount = require("./graphAPI");
     const GraphAPIHasAccount = GraphAPIModuleHasAccount.default;
 
     const apiResult = { temp: 10 };
