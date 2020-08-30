@@ -64,7 +64,7 @@ class GraphAPI extends Component {
               value="Check Invitation Status"
               onClick={() => this.onCheckInvitationStatus()}
             />
-            <div className="data-graph">
+            <div className="data-graph" id="data">
               {this.props.apiResult && <Json data={this.props.apiResult} />}
               {this.props.apiError && (
                 <p className="error">Error: {this.props.apiError}</p>

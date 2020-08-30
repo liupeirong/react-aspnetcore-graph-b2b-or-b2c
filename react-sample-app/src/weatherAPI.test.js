@@ -29,9 +29,7 @@ describe("when authenticated", () => {
                 resolve({ accessToken: "foo" });
               });
             },
-            acquireTokenRedirect: request => {
-              return Promise.resolve("abc");
-            },
+            acquireTokenRedirect: () => null,
             handleRedirectCallback: () => null,
             getAccount: () => {}
           };
