@@ -7,11 +7,11 @@ on:
   push:
     branches: [ master ]
     paths:
-    - 'react-sample-app'
+    - 'react-sample-app/**'
   pull_request:
     branches: [ master ]
     paths:
-    - 'react-sample-app'
+    - 'react-sample-app/**'
 
 jobs:
   build:
