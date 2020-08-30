@@ -38,31 +38,25 @@ export default C =>
     }
 
     async onPostAPI(scopes, endpoint, body) {
-      const tokenResponse = await this.props
-        .acquireToken({ scopes: scopes })
-        .catch(e => {
-          this.setState({
-            apiError: e
-          });
-        });
-
-      if (tokenResponse) {
-        const apiResult = await postAPI(
-          endpoint,
-          tokenResponse.accessToken,
-          body
-        ).catch(e => {
-          this.setState({
-            apiError: e
-          });
-        });
-
-        if (apiResult) {
-          this.setState({
-            apiResult: apiResult,
-            apiError: null
-          });
+      try {
+        const tokenResponse = await this.props.acquireToken({ scopes: scopes });
+        if (tokenResponse) {
+          const apiResult = await postAPI(
+            endpoint,
+            tokenResponse.accessToken,
+            body
+          );
+          if (apiResult) {
+            this.setState({
+              apiResult: apiResult,
+              apiError: null
+            });
+          }
         }
+      } catch (e) {
+        this.setState({
+          apiError: e
+        });
       }
     }
 
