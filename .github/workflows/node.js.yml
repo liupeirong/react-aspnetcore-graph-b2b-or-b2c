@@ -8,10 +8,12 @@ on:
     branches: [ master ]
     paths:
     - 'react-sample-app/**'
+    - '.git/workflows/*.js.yml'
   pull_request:
     branches: [ master ]
     paths:
     - 'react-sample-app/**'
+    - '.git/workflows/*.js.yml'
 
 jobs:
   build:
