@@ -23,7 +23,7 @@ export const getAPI = async (url, accessToken) => {
     const responseJson = await response.json();
     return responseJson;
   } else {
-    throw new Error("fetch failed: " + url);
+    throw new Error("fetch get failed: " + url);
   }
 };
 
@@ -36,8 +36,11 @@ export const postAPI = async (url, accessToken, data) => {
     },
     body: JSON.stringify(data)
   });
-
-  return "Status code: " + response.status;
+  if (response.status >= 200) {
+    return { http_status: response.status };
+  } else {
+    throw new Error("fetch post failed: " + url);
+  }
 };
 
 export const msalApp = new UserAgentApplication({

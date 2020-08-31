@@ -56,11 +56,13 @@ class GraphAPI extends Component {
             />
             <input
               type="button"
+              id="inviteBtn"
               value="Invite B2B User"
               onClick={() => this.onInviteB2BUser()}
             />
             <input
               type="button"
+              id="inviteStatusBtn"
               value="Check Invitation Status"
               onClick={() => this.onCheckInvitationStatus()}
             />

@@ -1,6 +1,7 @@
 import React from "react";
 import { unmountComponentAtNode, render } from "react-dom";
 import { act } from "react-dom/test-utils";
+import { env } from "./config";
 
 let container = null;
 beforeEach(() => {
@@ -47,30 +48,33 @@ describe("when authenticated", () => {
     expect(button).toBeNull();
   });
 
-  it.skip("renders result when weather api returned 200", async () => {
+  it("invites user successfully when graph api returned 201", async () => {
     const GraphAPIModuleHasAccount = require("./graphAPI");
     const GraphAPIHasAccount = GraphAPIModuleHasAccount.default;
 
-    const apiResult = { temp: 10 };
+    const http_status = 201;
     jest.spyOn(global, "fetch").mockImplementation(() =>
       Promise.resolve({
-        json: () => Promise.resolve(apiResult),
-        status: 200
+        status: http_status
       })
     );
 
     await act(async () => {
       render(<GraphAPIHasAccount />, container);
     });
-    const button = container.querySelector("button");
+    const button = document.getElementById("inviteBtn");
     await act(async () => {
       button.dispatchEvent(new MouseEvent("click", { bubbles: true }));
     });
 
     const rendered = document.getElementById("data").textContent;
     const actualAPIResult = JSON.parse(rendered);
-    expect(actualAPIResult.temp).toBe(apiResult.temp);
+    expect(actualAPIResult.http_status).toBe(http_status);
     expect(fetch).toHaveBeenCalledTimes(1);
+    expect(fetch).toHaveBeenCalledWith(
+      env.apiURL + "/user",
+      expect.objectContaining({ method: "POST" })
+    );
 
     global.fetch.mockRestore();
   });
