@@ -34,7 +34,7 @@ class WeatherAPI extends Component {
             <div className="data-graph" id="data">
               {this.props.apiResult && <Json data={this.props.apiResult} />}
               {this.props.apiError && (
-                <p className="error">Error: {this.props.apiError.Message}</p>
+                <p className="error">Error: {this.props.apiError.message}</p>
               )}
             </div>
           </>

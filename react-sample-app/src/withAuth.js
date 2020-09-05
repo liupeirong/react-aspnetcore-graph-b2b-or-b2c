@@ -26,7 +26,7 @@ export default C =>
             redirectUri: env.auth.redirectURL
           });
         } else {
-          console.error("Non-interactive error:", error.errorCode);
+          throw new Error("Non-interactive error:" + error.errorCode);
         }
       });
     }
@@ -45,12 +45,9 @@ export default C =>
     async componentDidMount() {
       msalApp.handleRedirectCallback(error => {
         if (error) {
-          const errorMessage = error.errorMessage
-            ? error.errorMessage
-            : "Unable to acquire access token.";
           // setState works as long as navigateToLoginRequestUrl: false
           this.setState({
-            error: errorMessage
+            error: error
           });
         }
       });

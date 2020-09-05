@@ -21,20 +21,20 @@ class GraphAPI extends Component {
     };
   }
 
-  async onInputChange(e) {
+  onInputChange(e) {
     this.setState({
       targetEmail: e.target.value
     });
   }
 
-  async onInviteB2BUser() {
+  onInviteB2BUser() {
     const scopes = env.auth.apiScopes;
     const endpoint = env.apiURL + "/user";
     const data = { Email: this.state.targetEmail };
     this.props.onPostAPI(scopes, endpoint, data);
   }
 
-  async onCheckInvitationStatus() {
+  onCheckInvitationStatus() {
     const scopes = env.auth.apiScopes;
     const emailToCheck = this.state.targetEmail.endsWith("@" + env.auth.domain)
       ? this.state.targetEmail
@@ -56,18 +56,20 @@ class GraphAPI extends Component {
             />
             <input
               type="button"
+              id="inviteBtn"
               value="Invite B2B User"
               onClick={() => this.onInviteB2BUser()}
             />
             <input
               type="button"
+              id="inviteStatusBtn"
               value="Check Invitation Status"
               onClick={() => this.onCheckInvitationStatus()}
             />
             <div className="data-graph" id="data">
               {this.props.apiResult && <Json data={this.props.apiResult} />}
               {this.props.apiError && (
-                <p className="error">Error: {this.props.apiError}</p>
+                <p className="error">Error: {this.props.apiError.message}</p>
               )}
             </div>
           </>

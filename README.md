@@ -3,7 +3,7 @@
 This sample application modifies the [react-sample-app](https://github.com/AzureAD/microsoft-authentication-library-for-js/tree/dev/samples/react-sample-app) for [Microsoft Authentication Library (MSAL) for JavaScript](https://github.com/AzureAD/microsoft-authentication-library-for-js). It demonstrates the following scenarios:
 
 1. It calls a [ASP.NET Core Web API](aspnet-core-webapi/Controllers/WeatherForecastController.cs) built with [Microsoft.Identity.Web](https://github.com/AzureAD/microsoft-identity-web) which helps integrating ASP.<span></span>NET Core middleware with [Microsoft Identity Platform](https://docs.microsoft.com/en-us/azure/active-directory/develop/) (formerly _Azure AD v2.0 endpoint_).
-2. With a configuration change in the frontend [.env](react-sample-app/.env.sample) and backend [AppSettings.json](aspnet-core-webapi/appsettings.json), this app can authenticate with Azure AD (Single Tenant or B2B) or Azure AD B2C.
+2. With a configuration change in the frontend [.env](react-sample-app/.env) and backend [AppSettings.json](aspnet-core-webapi/appsettings.json), this app can authenticate with Azure AD (Single Tenant or B2B) or Azure AD B2C.
 3. When used with Azure AD B2B, it calls a [Web API](aspnet-core-webapi/Controllers/UserController.cs) which further calls a Graph API to invite a B2B user, or to check the user's invitation status.
 4. There are 3 frontend samples:
     * [react-sample-app](react-sample-app) is a React.js SPA using MSAL v1 which supports OAuth2 Implicit flow.
