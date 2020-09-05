@@ -14,12 +14,14 @@ afterEach(() => {
   container = null;
 });
 
+let WeatherAPI = null;
 describe("when authenticated", () => {
   beforeAll(() => {
     // in order to mock a module with different behavior for each test,
     // and if the module doesn't just export a function,
     // you need to require the module after the mock. See:
     // https://github.com/facebook/jest/issues/2582
+    jest.resetModules();
     jest.mock("msal", () => {
       return {
         UserAgentApplication: jest.fn().mockImplementation(() => {
@@ -37,12 +39,10 @@ describe("when authenticated", () => {
         Logger: jest.fn().mockImplementation(() => null)
       };
     });
+    WeatherAPI = require("./weatherAPI").default;
   });
 
   it("renders result when weather api returned 200", async () => {
-    const WeatherAPIModuleHasAccount = require("./weatherAPI");
-    const WeatherAPIHasAccount = WeatherAPIModuleHasAccount.default;
-
     const apiResult = { temp: 10 };
     jest.spyOn(global, "fetch").mockImplementation(() =>
       Promise.resolve({
@@ -52,7 +52,7 @@ describe("when authenticated", () => {
     );
 
     await act(async () => {
-      render(<WeatherAPIHasAccount />, container);
+      render(<WeatherAPI />, container);
     });
     const button = container.querySelector("button");
     await act(async () => {
@@ -68,9 +68,6 @@ describe("when authenticated", () => {
   });
 
   it("renders error when fetch failed", async () => {
-    const WeatherAPIModuleHasAccount = require("./weatherAPI");
-    const WeatherAPIHasAccount = WeatherAPIModuleHasAccount.default;
-
     jest.spyOn(global, "fetch").mockImplementation(() =>
       Promise.resolve({
         json: () => Promise.reject({ error: "network error" })
@@ -79,7 +76,7 @@ describe("when authenticated", () => {
     );
 
     await act(async () => {
-      render(<WeatherAPIHasAccount />, container);
+      render(<WeatherAPI />, container);
     });
     const button = container.querySelector("button");
     await act(async () => {
@@ -94,9 +91,6 @@ describe("when authenticated", () => {
   });
 
   it("renders error when weather API did not return 200", async () => {
-    const WeatherAPIModuleHasAccount = require("./weatherAPI");
-    const WeatherAPIHasAccount = WeatherAPIModuleHasAccount.default;
-
     jest.spyOn(global, "fetch").mockImplementation(() =>
       Promise.resolve({
         status: 400
@@ -104,7 +98,7 @@ describe("when authenticated", () => {
     );
 
     await act(async () => {
-      render(<WeatherAPIHasAccount />, container);
+      render(<WeatherAPI />, container);
     });
     const button = container.querySelector("button");
     await act(async () => {
@@ -121,10 +115,6 @@ describe("when authenticated", () => {
 
 describe("when not authenticated", () => {
   beforeAll(() => {
-    // in order to mock a module with different behavior for each test,
-    // and if the module doesn't just export a function,
-    // you need to require the module after the mock. See:
-    // https://github.com/facebook/jest/issues/2582
     jest.resetModules();
     jest.mock("msal", () => {
       return {
@@ -137,18 +127,12 @@ describe("when not authenticated", () => {
         Logger: jest.fn().mockImplementation(() => null)
       };
     });
+    WeatherAPI = require("./weatherAPI").default;
   });
 
   it("does not have call API button", async () => {
-    // in order to mock a module with different behavior for each test,
-    // and if the module doesn't just export a function,
-    // you need to require the module after the mock. See:
-    // https://github.com/facebook/jest/issues/2582
-    const WeatherAPIModuleNoAccount = require("./weatherAPI");
-    const WeatherAPINoAccount = WeatherAPIModuleNoAccount.default;
-
     await act(async () => {
-      render(<WeatherAPINoAccount />, container);
+      render(<WeatherAPI />, container);
     });
 
     const button = container.querySelector("button");
